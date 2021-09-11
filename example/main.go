@@ -5,10 +5,14 @@ import (
 	"net/http"
 )
 
-func main(){
+func main() {
 	engine := goweb.NewEngine()
-	engine.POST("/hello", func(w http.ResponseWriter, req *http.Request) {
-		w.Write([]byte("this is hello router"))
+	engine.POST("/hello", func(ctx *goweb.Context) {
+		ctx.String(http.StatusOK, "this is hello POST function")
+	})
+
+	engine.GET("/hello", func(ctx *goweb.Context) {
+		ctx.String(http.StatusOK, "this is hello get function")
 	})
 
 	_ = engine.Run(":8888")

@@ -5,47 +5,44 @@ import (
 	"net/http"
 )
 
-func NewEngine() *engine{
+func NewEngine() *engine {
 	return &engine{
-		router{
-			m: make(map[string]http.HandlerFunc),
-		},
+		newRouter(),
 	}
 }
 
 type engine struct {
-	r router
+	r *router
 }
 
 func (e *engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	method := req.Method
-	path := req.URL.Path
-	handler, err := e.r.get(method, path)
+	ctx := newContext(w, req)
+	handler, err := e.r.get(ctx.Method, ctx.Path)
 	if err != nil {
-		fmt.Fprintf(w, err.Error())
+		ctx.Status(http.StatusNotFound)
+		fmt.Fprintf(ctx.Writer, err.Error())
 		return
 	}
 
-	handler(w, req)
+	handler(ctx)
 }
 
-func (e *engine)POST(path string, handlerFunc http.HandlerFunc)  {
+func (e *engine) Run(addr string) error {
+	return http.ListenAndServe(addr, e)
+}
+
+func (e *engine) POST(path string, handlerFunc HandlerFunc) {
 	e.r.add("POST", path, handlerFunc)
 }
 
-func (e *engine)GET(path string, handlerFunc http.HandlerFunc)  {
+func (e *engine) GET(path string, handlerFunc HandlerFunc) {
 	e.r.add("GET", path, handlerFunc)
 }
 
-func (e *engine)DELETE(path string, handlerFunc http.HandlerFunc)  {
+func (e *engine) DELETE(path string, handlerFunc HandlerFunc) {
 	e.r.add("DELETE", path, handlerFunc)
 }
 
-func (e *engine)PUT(path string, handlerFunc http.HandlerFunc)  {
+func (e *engine) PUT(path string, handlerFunc HandlerFunc) {
 	e.r.add("PUT", path, handlerFunc)
-}
-
-
-func (e *engine)Run(addr string) error {
-	return http.ListenAndServe(addr, e)
 }
