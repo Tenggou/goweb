@@ -13,3 +13,9 @@ a web framework for golang
 目标：对request与response相关操作进行封装
 1. 存储格式：struct包含request与response
 2. 封装对response的操作：String, JSON
+
+## step 3 动态路由
+目标：支持:name与*两种动态路由
+1. 实现方法：前缀树
+2. 注册路由：解析路径；构建前缀树结点；存入router
+3. ###### 服务获取：解析路径；查找前缀树；从router 获取服务
