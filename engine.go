@@ -31,18 +31,18 @@ func (e *engine) Run(addr string) error {
 	return http.ListenAndServe(addr, e)
 }
 
-func (e *engine) POST(path string, handlerFunc HandlerFunc) {
-	e.r.add("POST", path, handlerFunc)
+func (e *engine) POST(pattern string, handlerFunc HandlerFunc) {
+	e.r.add("POST", pattern, handlerFunc)
 }
 
-func (e *engine) GET(path string, handlerFunc HandlerFunc) {
-	e.r.add("GET", path, handlerFunc)
+func (e *engine) GET(pattern string, handlerFunc HandlerFunc) {
+	e.r.add("GET", pattern, handlerFunc)
 }
 
-func (e *engine) DELETE(path string, handlerFunc HandlerFunc) {
-	e.r.add("DELETE", path, handlerFunc)
+func (e *engine) DELETE(pattern string, handlerFunc HandlerFunc) {
+	e.r.add("DELETE", pattern, handlerFunc)
 }
 
-func (e *engine) PUT(path string, handlerFunc HandlerFunc) {
-	e.r.add("PUT", path, handlerFunc)
+func (e *engine) PUT(pattern string, handlerFunc HandlerFunc) {
+	e.r.add("PUT", pattern, handlerFunc)
 }
